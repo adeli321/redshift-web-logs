@@ -82,6 +82,8 @@ def insert_into_table():
         #     file_names.append(i['Key'])
         # file_names.pop(0) # remove 'BI_logs' folder name from list, because it's not a specific file name
         # for log in file_names:
+        ######## If too many files in S3 bucket, the script freezes after a few hours of running ########
+        ######## Instead of iterating through the whole bucket, I process one file each ########
 
         file_object = s3_client.get_object(Bucket='la-ticket-bucket-eu', 
                                         Key='BI_logs/u_ex110407.log')
@@ -136,8 +138,8 @@ if __name__ == '__main__':
     insert_into_table()
 
 
-
+        ######## Code to bulk load data from S3 to redshift ########
+        ######## COPY is more performant than individual INSERT INTO statements ########
+        ######## To be swapped/optimised at a later date ########
         # rf"""COPY public.s3_load FROM 's3://la-ticket-bucket-eu/u_ex091024.log'
         # IAM_ROLE 'arn:aws:iam::900056063831:role/RedshiftCopyUnload' DELIMITER '\n'"""
-        # """COPY public.s3_load FROM 's3://la-ticket-bucket-eu/u_ex091024.log'
-        # IAM_ROLE 'arn:aws:iam::900056063831:role/RedshiftCopyUnload' DELIMITER ' ';"""
